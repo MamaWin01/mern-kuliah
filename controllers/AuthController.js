@@ -10,7 +10,7 @@ const jwtsecret = process.env.JWTSECRET
 
 const signin = async (req, res, next) => {
   console.log(req.body)
-  let user = await User.findOne({'username': req.body.username})
+  let user = await User.findOne({'name': req.body.name})
 
   if(!user || !user.authenticate(req.body.password)){
     return res.status(401).json({
