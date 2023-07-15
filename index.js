@@ -39,16 +39,6 @@ app.use('/', jabatanRoutes);
 app.use('/', kehadiranRoutes);
 app.use('/', gajiRoutes);
 
-// Auth = Login Register Logout
-
-// Data karyawan = Create, read, update, delete
-
-// Data Jabatan
-
-// Data kehadiran = Create, read, update, delete
-
-// Data Gaji
-// https://www.youtube.com/watch?v=jqnDsRzwRag
 app.listen(port, () => {
   console.log(`Server running on port http://127.0.0.1:${port}`);
 });

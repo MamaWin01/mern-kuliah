@@ -5,6 +5,7 @@ import extend from 'lodash/extend.js'
 
 // setup process.env
 import dotenv from 'dotenv'
+import account from '../models/account.js'
 dotenv.config();
 
 const jwtsecret = process.env.jwtsecret
@@ -62,7 +63,18 @@ const logout = async (req, res, next) => {
 
 const update = async (req, res) => {
     try {
-      var user = await AccountModel.findById({_id: req.params.id})
+      var user = await AccountModel.findOne({name: req.body.name})
+      if(req.body.new_password.length < 6) {
+        return res.status(500).json({
+          error: "Password must be over 6 character"
+        })
+      }
+      if(!user.authenticate(req.body.password)) {
+        return res.status(500).json({
+          error: "Password Wrong"
+        })
+      }
+      req.body.password = req.body.new_password
       user = extend(user, req.body)
       await user.save()
       user.hashed_password = undefined
