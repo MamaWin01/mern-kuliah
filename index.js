@@ -8,6 +8,7 @@ import userRoutes from './routes/userRoutes.js'
 import karyawanRoutes from './routes/karyawanRoutes.js'
 import jabatanRoutes from './routes/jabatanRoutes.js'
 import kehadiranRoutes from './routes/kehadiranRoutes.js'
+import gajiRoutes from './routes/gajiRoutes.js'
 
 // setup process.env
 import dotenv from 'dotenv'
@@ -36,6 +37,7 @@ app.use('/', userRoutes);
 app.use('/', karyawanRoutes);
 app.use('/', jabatanRoutes);
 app.use('/', kehadiranRoutes);
+app.use('/', gajiRoutes);
 
 // Auth = Login Register Logout
 

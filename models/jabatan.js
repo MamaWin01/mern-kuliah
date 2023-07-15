@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-const jabatanSchema = new mongoose.Schema({
+const JabatanSchema = new mongoose.Schema({
   id: String,
   name: String,
   pokok: String,
@@ -8,4 +8,4 @@ const jabatanSchema = new mongoose.Schema({
   makan: String
 })
 
-export default mongoose.model('Jabatan', jabatanSchema, 'Jabatan');
+export default mongoose.model('Jabatan', JabatanSchema, 'Jabatan');

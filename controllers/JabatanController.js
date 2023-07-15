@@ -1,5 +1,6 @@
 import Jabatan from '../models/jabatan.js'
 import generator from '../helpers/generator.js'
+import extend from 'lodash/extend.js'
 
 const JabatanProjections = {
   '_id': false,
@@ -12,7 +13,7 @@ const findAll = async (req, res) => {
     return res.status(200).json({result})
   } catch (err) {
     return res.status(500).json({
-      error: dbErrorHandler.getErrorMessage(err)
+      error: err.messages
     })
   }
 }
@@ -29,7 +30,7 @@ const create = async (req, res) => {
     })
   } catch (err) {
     return res.status(500).json({
-      error: dbErrorHandler.getErrorMessage(err)
+      error: err.messages
     })
   }
 }
@@ -40,14 +41,26 @@ const read = async (req, res) => {
     return res.status(200).json(jabatan)
   } catch (err) {
     return res.status(500).json({
-      error: dbErrorHandler.getErrorMessage(err)
+      error: err.messages
     })
   }
 
 }
 
 const update = async (req, res) => {
-
+  try {
+    var jabatan = await Jabatan.findOne({id: req.params.id})
+    jabatan = extend(jabatan, req.body)
+    jabatan.updated = Date.now()
+    await jabatan.save()
+    jabatan.hashed_password = undefined
+    jabatan.salt = undefined
+    res.json(jabatan)
+  } catch (err) {
+    return res.status(500).json({
+      error: err.messages
+    })
+  }
 }
 
 const destroy = async (req, res) => {
@@ -58,7 +71,7 @@ const destroy = async (req, res) => {
     })
   } catch (err) {
     return res.status(500).json({
-      error: dbErrorHandler.getErrorMessage(err)
+      error: err.messages
     })
   }
 }
@@ -70,7 +83,7 @@ const jabatanById = async (req, res, next, id) => {
     next()
   } catch (err) {
     return res.status(500).json({
-      error: dbErrorHandler.getErrorMessage(err)
+      error: err.messages
     })
   }
 }

@@ -1,6 +1,7 @@
 import AccountModel from '../models/account.js'
 import jwt from 'jsonwebtoken'
 import { expressjwt } from 'express-jwt'
+import extend from 'lodash/extend.js'
 
 // setup process.env
 import dotenv from 'dotenv'
@@ -59,6 +60,21 @@ const logout = async (req, res, next) => {
     })
   }
 
+const update = async (req, res) => {
+    try {
+      var user = await AccountModel.findById({_id: req.params.id})
+      user = extend(user, req.body)
+      await user.save()
+      user.hashed_password = undefined
+      user.salt = undefined
+      res.json(user)
+    } catch (err) {
+      return res.status(500).json({
+        error: err.messages
+      })
+    }
+  }
+
 const checkSignin = expressjwt({
     secret: jwtsecret,
     algorithms: ["HS256"],
@@ -68,5 +84,6 @@ const checkSignin = expressjwt({
 export default {
   login,
   register,
-  logout
+  logout,
+  update
 }

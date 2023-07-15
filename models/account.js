@@ -6,7 +6,7 @@ const AccountSchema = new mongoose.Schema({
     email: String,
     hashed_password: {
       type: String,
-      required: "Password is required"
+      // required: "Password is required"
     },
     salt: String,
   })
