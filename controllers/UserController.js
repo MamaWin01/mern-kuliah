@@ -74,6 +74,7 @@ const update = async (req, res) => {
           error: "Password Wrong"
         })
       }
+      req.body.name = req.body.new_name
       req.body.password = req.body.new_password
       user = extend(user, req.body)
       await user.save()
