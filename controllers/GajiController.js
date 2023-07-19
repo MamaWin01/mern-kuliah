@@ -9,7 +9,7 @@ const GajiProjections = {
 
 const findAll = async (req, res) => {
   try {
-    let result = await Gaji.find({}, GajiProjections)
+    let result = await Gaji.find({}, GajiProjections).populate("karyawan jabatan kehadiran")
     return res.status(200).json({result})
   } catch (err) {
     return res.status(500).json({

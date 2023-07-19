@@ -1,14 +1,14 @@
-import Jabatan from '../models/jabatan.js'
+import Kehadiran from '../models/kehadiran.js'
 import extend from 'lodash/extend.js'
 
-const JabatanProjections = {
+const KehadiranProjections = {
   '_id': false,
   '__v': false
 }
 
 const findAll = async (req, res) => {
   try {
-    let result = await Jabatan.find({}, JabatanProjections)
+    let result = await Kehadiran.find({}, KehadiranProjections).populate("karyawan")
     return res.status(200).json({result})
   } catch (err) {
     return res.status(500).json({
@@ -20,11 +20,11 @@ const findAll = async (req, res) => {
 const create = async (req, res) => {
   req.body.id = generator.generateId(6)
   
-  const jabatan = new Jabatan(req.body)
+  const kehadiran = new Kehadiran(req.body)
   try {
-    let result = await jabatan.save()
+    let result = await kehadiran.save()
     return res.status(200).json({
-      messages: 'Jabatan successfully added',
+      messages: 'Kehadiran successfully added',
       result
     })
   } catch (err) {
@@ -36,8 +36,8 @@ const create = async (req, res) => {
 
 const read = async (req, res) => {
   try {
-    const jabatan = await Jabatan.findOne({id: req.params.id}, JabatanProjections)
-    return res.status(200).json(jabatan)
+    const kehadiran = await Kehadiran.findOne({id: req.params.id}, KehadiranProjections)
+    return res.status(200).json(kehadiran)
   } catch (err) {
     return res.status(500).json({
       error: err.messages
@@ -48,7 +48,16 @@ const read = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-    var kehadiran = await Kehadiran.findOne({id: req.params.id})
+    var kehadiran = await Kehadiran.findOne({id: req.params.id}).populate("karyawan")
+    if(req.body.hadir == null || req.body.hadir == '') {
+      req.body.hadir = '0'
+    }
+    if(req.body.izin == null || req.body.izin == '') {
+      req.body.izin = '0'
+    }
+    if(req.body.sakit == null || req.body.sakit == '') {
+      req.body.sakit = '0'
+    }
     kehadiran = extend(kehadiran, req.body)
     kehadiran.updated = Date.now()
     await kehadiran.save()
@@ -64,9 +73,9 @@ const update = async (req, res) => {
 
 const destroy = async (req, res) => {
   try {
-    await Jabatan.deleteOne({id: req.params.id})
+    await Kehadiran.deleteOne({id: req.params.id})
     return res.status(200).json({
-      messages: 'Successfully deleted jabatan'
+      messages: 'Successfully deleted kehadiran'
     })
   } catch (err) {
     return res.status(500).json({
@@ -75,10 +84,10 @@ const destroy = async (req, res) => {
   }
 }
 
-const jabatanById = async (req, res, next, id) => {
+const kehadiranById = async (req, res, next, id) => {
   try {
-    const jabatan = await Jabatan.findOne({id})
-    req.jabatan = jabatan
+    const kehadiran = await Kehadiran.findOne({id})
+    req.kehadiran = kehadiran
     next()
   } catch (err) {
     return res.status(500).json({
@@ -93,5 +102,5 @@ export default {
   read,
   update,
   destroy,
-  jabatanById
+  kehadiranById
 }

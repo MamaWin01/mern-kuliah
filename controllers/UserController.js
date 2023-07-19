@@ -16,7 +16,7 @@ const login = async (req, res, next) => {
 
   if(!user || !user.authenticate(req.body.password)){
     return res.status(401).json({
-      error: 'Email or password not match'
+      error: 'Name or password anda tidak sesuai'
     })
   }
 
@@ -42,6 +42,35 @@ const login = async (req, res, next) => {
 
 const register = async (req, res, next) => {
     const user = new AccountModel(req.body)
+    if(req.body.password) {
+      if(req.body.password.length < 6) {
+        return res.status(200).json({
+          error: "Password harus melebihi 6 huruf"
+        })
+      }
+    } else {
+      if(!req.body.name) {
+        return res.status(200).json({
+          error: "Nama harus terisi"
+        })
+      }
+      if(!req.body.email) {
+        return res.status(200).json({
+          error: "Email harus terisi"
+        })
+      }
+      if(!req.body.password) {
+        return res.status(200).json({
+          error: "Password harus terisi"
+        })
+      }
+    }
+    const validName = await AccountModel.findOne({name:req.body.name})
+    if(validName) {
+      return res.status(200).json({
+        error: "Nama sudah terpakai"
+      })
+    }
     try {
         await user.save()
         return res.status(200).json({
@@ -66,12 +95,12 @@ const update = async (req, res) => {
       var user = await AccountModel.findOne({name: req.body.name})
       if(req.body.new_password.length < 6) {
         return res.status(500).json({
-          error: "Password must be over 6 character"
+          error: "Password harus melebihi 6 huruf"
         })
       }
       if(!user.authenticate(req.body.password)) {
         return res.status(500).json({
-          error: "Password Wrong"
+          error: "Paswword atau nama anda salah"
         })
       }
       req.body.name = req.body.new_name

@@ -12,7 +12,7 @@ const gajiSchema = new mongoose.Schema({
   },
   kehadiran: {
     type: mongoose.Schema.ObjectId,
-    ref: 'Karyawan'
+    ref: 'Kehadiran'
   }
 })
 
