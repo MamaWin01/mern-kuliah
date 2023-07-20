@@ -49,17 +49,17 @@ const register = async (req, res, next) => {
         })
       }
     } else {
-      if(!req.body.name) {
+      if(!req.body.name || req.body.name == '') {
         return res.status(200).json({
           error: "Nama harus terisi"
         })
       }
-      if(!req.body.email) {
+      if(!req.body.email || req.body.name == '') {
         return res.status(200).json({
           error: "Email harus terisi"
         })
       }
-      if(!req.body.password) {
+      if(!req.body.password || req.body.name == '') {
         return res.status(200).json({
           error: "Password harus terisi"
         })
